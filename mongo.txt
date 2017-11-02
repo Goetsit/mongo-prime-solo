@@ -50,3 +50,5 @@ Find orders with lineItems that have a quantity that is less than 10, but greate
 
 
  orders.find({lineItems:{$elemMatch:{quantity:{$gt:2, $lt:10}}}})
+ { "_id" : ObjectId("59fb625718b8db37eccc4431"), "orderDate" : "2017-02-03", "orderTotal" : 400, "lineItems" : [ { "unitPrice" : 100, "quantity" : 3, "productName" : "Cookie Sheet" } ] }
+> 
