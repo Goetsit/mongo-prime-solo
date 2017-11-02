@@ -1,0 +1,52 @@
+Create a collection named orders.
+
+>  db.createCollection('orders')
+{ "ok" : 1 }
+
+Insert at least 3 documents that represent an order. IMPORTANT: See section below for fields. Order dates should be: 2017-02-03, 2017-04-04, 2017-01-02
+
+> var orders = db.orders
+> orders.find()
+> orders.insert({orderDate:'2017-02-03', orderTotal: 300, lineItems:[{unitPrice: 100, quantity: 3, productName:'Cookie Sheet'}]})
+WriteResult({ "nInserted" : 1 })
+> orders.insert({orderDate:'2017-10-14', orderTotal: 69, lineItems:[{unitPrice: 69, quantity: 1, productName:'Birthday Cake'}]})
+WriteResult({ "nInserted" : 1 })
+> orders.insert({orderDate:'2017-04-05', orderTotal: 45, lineItems:[{unitPrice: 45, quantity: 1, productName:'Bottle of Water'}]})
+WriteResult({ "nInserted" : 1 })
+> 
+
+
+Find all orders and make them look pretty.
+
+orders.find().pretty()
+
+Find all orders with an orderDate that is after 1/31/2017.
+
+> orders.find({orderDate:{$gt:'2017-01-31'}})
+{ "_id" : ObjectId("59fb625718b8db37eccc4431"), "orderDate" : "2017-02-03", "orderTotal" : 300, "lineItems" : [ { "unitPrice" : 100, "quantity" : 3, "productName" : "Cookie Sheet" } ] }
+{ "_id" : ObjectId("59fb628818b8db37eccc4432"), "orderDate" : "2017-10-14", "orderTotal" : 69, "lineItems" : [ { "unitPrice" : 69, "quantity" : 1, "productName" : "Birthday Cake" } ] }
+{ "_id" : ObjectId("59fb62ce18b8db37eccc4433"), "orderDate" : "2017-04-05", "orderTotal" : 45, "lineItems" : [ { "unitPrice" : 45, "quantity" : 1, "productName" : "Bottle of Water" } ] }
+> 
+
+Change the orderTotal from 2/3/2017 to 63 dollars (you do NOT have to ensure the lineItems' unitPrice * quantity add up to the orderTotal)
+
+> orders.update({orderDate:'2017-02-03'},{$set:{orderTotal:400}})
+WriteResult({ "nMatched" : 1, "nUpserted" : 0, "nModified" : 1 })
+> 
+
+Add another lineItem to the order from 10/14/2017
+
+> orders.update({orderDate:'2017-10-14'},{$push:{lineItems:{tax: 5}}})
+WriteResult({ "nMatched" : 1, "nUpserted" : 0, "nModified" : 1 })
+> 
+Change the first lineItem in the order from 1/2/2017 to be for 2 'transistor radio's
+
+> orders.update({orderDate:'2017-04-05'},{$set:{"lineItems.0":"transistor radio"}})
+WriteResult({ "nMatched" : 1, "nUpserted" : 0, "nModified" : 1 })
+> 
+
+
+Find orders with lineItems that have a quantity that is less than 10, but greater than 2. You will have to research $elemMatch
+
+
+ orders.find({lineItems:{$elemMatch:{quantity:{$gt:2, $lt:10}}}})
